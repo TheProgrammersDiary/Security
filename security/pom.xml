@@ -11,7 +11,7 @@
 
   <groupId>ev.projects</groupId>
   <artifactId>security</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <name>security</name>
 
   <properties>
@@ -67,6 +67,11 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.2.1</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>

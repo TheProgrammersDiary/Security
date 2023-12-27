@@ -5,7 +5,7 @@ on:
  pull_request:
     branches: [main]
 jobs:
-  package:
+  test:
     runs-on: ubuntu-latest
     permissions:
       checks: write

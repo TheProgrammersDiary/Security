@@ -1,0 +1,39 @@
+name: Security lib CI/CD
+on:
+ push:
+    branches: [main]
+ pull_request:
+    branches: [main]
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: temurin
+    - name: Cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{runner.os}}-m2-${{hashFiles('security/pom.xml')}}
+        restore-keys: ${{runner.os}}-m2
+    - name: Test
+      run: mvn -B -f security/pom.xml test
+    - name: Publish Test Report
+      if: success() || failure()
+      uses: scacap/action-surefire-report@v1
+    -
+      name: run E2E tests
+      run: >
+        curl
+        -X POST https://api.github.com/repos/EvalVis/blogDocker/dispatches
+        -u ${{secrets.GITHUBTOKEN}}
+        -H "Accept: application/vnd.github.everest-preview+json"
+        -H "Content-Type: application/json"
+        --data '{"event_type": "trigger_tests_security"}'

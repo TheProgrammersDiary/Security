@@ -11,7 +11,7 @@
 
   <groupId>ev.projects</groupId>
   <artifactId>security</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <name>security</name>
 
   <properties>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>RELEASE</version>
+      <version>3.2.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

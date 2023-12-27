@@ -5,7 +5,7 @@ on:
  pull_request:
     branches: [main]
 jobs:
-  test:
+  package:
     runs-on: ubuntu-latest
     permissions:
       checks: write
@@ -23,11 +23,16 @@ jobs:
         path: ~/.m2
         key: ${{runner.os}}-m2-${{hashFiles('security/pom.xml')}}
         restore-keys: ${{runner.os}}-m2
-    - name: Test
-      run: mvn -B -f security/pom.xml test
+    - name: package
+      run: mvn -B -f security/pom.xml package
     - name: Publish Test Report
       if: success() || failure()
       uses: scacap/action-surefire-report@v1
+    - run: mkdir artifact && cp security/target/*.jar artifact
+    - uses: actions/upload-artifact@v4
+      with:
+       name: blog
+       path: artifact  
     -
       name: run E2E tests
       run: >

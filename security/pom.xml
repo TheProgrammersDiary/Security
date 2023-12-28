@@ -27,7 +27,7 @@
         <repository>
           <id>github</id>
           <name>GitHub Packages</name>
-          <url>https://maven.pkg.github.com/vlingo/xoom-common</url>
+          <url>https://maven.pkg.github.com/EvalVis/Security</url>
         </repository>
       </distributionManagement>
     </profile>

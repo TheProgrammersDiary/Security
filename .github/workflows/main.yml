@@ -30,7 +30,7 @@ jobs:
       if: success() || failure()
       uses: scacap/action-surefire-report@v1
     - name: Deploy to GitHub
-      run: mvn -b -DuseGitHubPackages=true deploy
+      run: mvn -B -DuseGitHubPackages=true deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     -

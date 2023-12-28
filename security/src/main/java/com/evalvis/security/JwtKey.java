@@ -1,4 +1,4 @@
-package ev.projects.security;
+package com.evalvis.security;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,7 +14,7 @@ public class JwtKey {
     private String plainKey;
 
     @Bean
-    SecretKey value() {
+    public SecretKey value() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(plainKey));
     }
 }

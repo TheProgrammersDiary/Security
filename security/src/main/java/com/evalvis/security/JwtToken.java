@@ -1,4 +1,4 @@
-package ev.projects.security;
+package com.evalvis.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package ev.projects.security;
+package com.evalvis.security;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;

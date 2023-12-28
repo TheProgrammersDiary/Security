@@ -1,4 +1,4 @@
-package ev.projects.security;
+package com.evalvis.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

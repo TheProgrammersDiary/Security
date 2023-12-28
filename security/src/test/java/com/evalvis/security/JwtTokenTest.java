@@ -1,4 +1,4 @@
-package ev.projects.security;
+package com.evalvis.security;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

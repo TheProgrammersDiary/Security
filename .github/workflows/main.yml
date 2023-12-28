@@ -29,16 +29,8 @@ jobs:
     - name: Publish Test Report
       if: success() || failure()
       uses: scacap/action-surefire-report@v1
-    - uses: s4u/maven-settings-action@v2.8.0
-      with:
-        servers: |
-          [{
-            "id": "github",
-            "username": "EvalVis",
-            "password": "${{ secrets.GIT_MAVEN_REPO }}"
-          }]
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+    - name: Deploy to GitHub
+      run: mvn -b -DuseGitHubPackages=true deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     -

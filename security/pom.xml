@@ -14,6 +14,25 @@
   <version>1.0.9</version>
   <name>security</name>
 
+  <profiles>
+    <profile>
+      <id>github</id>
+      <activation>
+        <property>
+          <name>useGitHubPackages</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <distributionManagement>
+        <repository>
+          <id>github</id>
+          <name>GitHub Packages</name>
+          <url>https://maven.pkg.github.com/vlingo/xoom-common</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+  </profiles>
+
   <properties>
     <java.version>17</java.version>
   </properties>

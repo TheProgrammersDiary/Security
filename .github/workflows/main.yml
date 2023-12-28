@@ -24,13 +24,13 @@ jobs:
         path: ~/.m2
         key: ${{runner.os}}-m2-${{hashFiles('security/pom.xml')}}
         restore-keys: ${{runner.os}}-m2
-    - name: package
-      run: mvn -B -f security/pom.xml package
+    - name: test
+      run: mvn -B -f security/pom.xml test
     - name: Publish Test Report
       if: success() || failure()
       uses: scacap/action-surefire-report@v1
     - name: Deploy to GitHub
-      run: mvn -B -DuseGitHubPackages=true -f security/pom.xml deploy
+      run: mvn -B -DuseGitHubPackages=true -f security/pom.xml -DskipTests deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     -

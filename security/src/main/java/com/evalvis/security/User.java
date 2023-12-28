@@ -10,9 +10,11 @@ import java.util.Objects;
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
     private final String username;
+    private final String password;
 
-    public User(String username) {
+    public User(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        throw new UnsupportedOperationException("Password retrieval is not supported.");
+        return password;
     }
 
     @Override

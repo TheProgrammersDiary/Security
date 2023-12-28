@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     .ifPresent(
                             token -> {
                                 if (token.tokenIsValid()) {
-                                    UserDetails userDetails = new User(token.username());
+                                    UserDetails userDetails = new User(token.username(), null);
                                     UsernamePasswordAuthenticationToken authentication =
                                             new UsernamePasswordAuthenticationToken(
                                                     userDetails,

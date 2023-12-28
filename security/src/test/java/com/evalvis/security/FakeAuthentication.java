@@ -8,8 +8,8 @@ import java.util.Collection;
 public final class FakeAuthentication implements Authentication {
     private final User user;
 
-    public FakeAuthentication(String username) {
-        this.user = new User(username);
+    public FakeAuthentication(String username, String password) {
+        this.user = new User(username, password);
     }
 
     @Override

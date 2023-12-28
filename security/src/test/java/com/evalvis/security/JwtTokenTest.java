@@ -26,7 +26,7 @@ public class JwtTokenTest {
 
     @Test
     void createsToken() {
-        JwtToken token = JwtToken.create(new FakeAuthentication("tester"), key, blacklistedJwtTokenRepository);
+        JwtToken token = JwtToken.create(new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository);
 
         assertAll(
                 () -> assertEquals("tester", token.username()),
@@ -42,7 +42,7 @@ public class JwtTokenTest {
                         "Authorization",
                         "Bearer " +
                                 JwtToken.create(
-                                        new FakeAuthentication("tester"), key, blacklistedJwtTokenRepository
+                                        new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository
                                 ).value()
                 )
         );
@@ -64,7 +64,7 @@ public class JwtTokenTest {
                         new Cookie(
                                 "jwt",
                                 JwtToken.create(
-                                        new FakeAuthentication("tester"), key, blacklistedJwtTokenRepository
+                                        new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository
                                 ).value()
                         )
                 }

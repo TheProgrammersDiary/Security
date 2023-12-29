@@ -22,11 +22,13 @@ public class JwtTokenTest {
             )
     );
 
-    private final BlacklistedJwtTokenRepository blacklistedJwtTokenRepository = new BlacklistedJwtTokenRepository();
+    private final BlacklistedJwtTokenRepository blacklistedJwtTokenRedisRepository = new BlacklistedJwtTokenFakeRepository();
 
     @Test
     void createsToken() {
-        JwtToken token = JwtToken.create(new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository);
+        JwtToken token = JwtToken.create(
+                new FakeAuthentication("tester", null), key, blacklistedJwtTokenRedisRepository
+        );
 
         assertAll(
                 () -> assertEquals("tester", token.username()),
@@ -42,12 +44,14 @@ public class JwtTokenTest {
                         "Authorization",
                         "Bearer " +
                                 JwtToken.create(
-                                        new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository
+                                        new FakeAuthentication("tester", null),
+                                        key,
+                                        blacklistedJwtTokenRedisRepository
                                 ).value()
                 )
         );
 
-        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRepository);
+        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRedisRepository);
 
         assertAll(
                 () -> assertTrue(token.isPresent()),
@@ -64,13 +68,15 @@ public class JwtTokenTest {
                         new Cookie(
                                 "jwt",
                                 JwtToken.create(
-                                        new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository
+                                        new FakeAuthentication("tester", null),
+                                        key,
+                                        blacklistedJwtTokenRedisRepository
                                 ).value()
                         )
                 }
         );
 
-        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRepository);
+        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRedisRepository);
 
         assertAll(
                 () -> assertTrue(token.isPresent()),

@@ -21,7 +21,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
     @Autowired
-    private BlacklistedJwtTokenRepository blacklistedJwtTokenRepository;
+    private BlacklistedJwtTokenRedisRepository blacklistedJwtTokenRedisRepository;
     @Autowired
     private JwtKey key;
 
@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         try {
-            JwtToken.existing(request, key.value(), blacklistedJwtTokenRepository)
+            JwtToken.existing(request, key.value(), blacklistedJwtTokenRedisRepository)
                     .ifPresent(
                             token -> {
                                 if (token.tokenIsValid()) {

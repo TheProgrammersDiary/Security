@@ -5,6 +5,8 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.crypto.SecretKey;
 
@@ -22,12 +24,12 @@ public class JwtTokenTest {
             )
     );
 
-    private final BlacklistedJwtTokenRepository blacklistedJwtTokenRedisRepository = new BlacklistedJwtTokenFakeRepository();
+    private final BlacklistedJwtTokenRepository blacklistedJwtTokenRepository = new BlacklistedJwtTokenFakeRepository();
 
     @Test
     void createsToken() {
         JwtToken token = JwtToken.create(
-                new FakeAuthentication("tester", null), key, blacklistedJwtTokenRedisRepository
+                new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository
         );
 
         assertAll(
@@ -46,19 +48,17 @@ public class JwtTokenTest {
                                 JwtToken.create(
                                         new FakeAuthentication("tester", null),
                                         key,
-                                        blacklistedJwtTokenRedisRepository
+                                        blacklistedJwtTokenRepository
                                 ).value()
                 )
         );
 
-        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRedisRepository);
+        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRepository);
 
-        assertAll(
-                () -> assertTrue(token.isPresent()),
-                () -> assertEquals("tester", token.get().username()),
-                () -> assertTrue(token.get().expirationDate().after(new Date(System.currentTimeMillis()))),
-                () -> assertTrue(token.get().tokenIsValid())
-        );
+        assertTrue(token.isPresent());
+        assertEquals("tester", token.get().username());
+        assertTrue(token.get().expirationDate().after(new Date(System.currentTimeMillis())));
+        assertTrue(token.get().tokenIsValid());
     }
 
     @Test
@@ -70,19 +70,52 @@ public class JwtTokenTest {
                                 JwtToken.create(
                                         new FakeAuthentication("tester", null),
                                         key,
-                                        blacklistedJwtTokenRedisRepository
+                                        blacklistedJwtTokenRepository
                                 ).value()
                         )
                 }
         );
 
-        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRedisRepository);
+        Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRepository);
 
-        assertAll(
-                () -> assertTrue(token.isPresent()),
-                () -> assertEquals("tester", token.get().username()),
-                () -> assertTrue(token.get().expirationDate().after(new Date(System.currentTimeMillis()))),
-                () -> assertTrue(token.get().tokenIsValid())
+        assertTrue(token.isPresent());
+        assertEquals("tester", token.get().username());
+        assertTrue(token.get().expirationDate().after(new Date(System.currentTimeMillis())));
+        assertTrue(token.get().tokenIsValid());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "",
+            "short",
+            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDUxNjg1OTQsI" +
+                    "mV4cCI6MTcwNTE2OTE5NH0.0BKl5k3IJ7PlfpuuPjRO0qqb7_IVal6IqqjvkPLm3Yhk" +
+                    "rqsn5SMYtkNqN321ChofuxvhhfdfJdROuh10_hyflg" // expired token
+    })
+    void rejectsInvalidToken(String jwt) {
+        // Token is neither in Auth header nor cookies.
+        assertFalse(
+                JwtToken.existing(
+                        new FakeHttpServletRequest(Map.of(), null), key, blacklistedJwtTokenRepository
+                ).isPresent()
+        );
+        // Token is in Auth header.
+        assertFalse(
+                JwtToken.existing(
+                        new FakeHttpServletRequest(Map.of("Authorization", jwt)),
+                        key,
+                        blacklistedJwtTokenRepository
+                ).isPresent()
+        );
+        // Token is in cookies.
+        assertFalse(
+                JwtToken.existing(
+                        new FakeHttpServletRequest(new Cookie[]{new Cookie("jwt", jwt)}),
+                        key,
+                        blacklistedJwtTokenRepository
+                )
+                .get()
+                .tokenIsValid()
         );
     }
 }

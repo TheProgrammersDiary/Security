@@ -121,7 +121,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
 
     @Override
     public HttpSession getSession(boolean create) {
-        throw new UnsupportedOperationException("Not implemented");
+        return new FakeHttpSession();
     }
 
     @Override
@@ -266,7 +266,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getRemoteAddr() {
-        throw new UnsupportedOperationException("Not implemented");
+        return "localhost";
     }
 
     @Override

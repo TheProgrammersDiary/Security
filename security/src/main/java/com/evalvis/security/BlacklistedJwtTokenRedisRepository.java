@@ -13,10 +13,13 @@ import java.util.Iterator;
 
 @Service
 public class BlacklistedJwtTokenRedisRepository implements BlacklistedJwtTokenRepository {
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
+    private final StringRedisTemplate redisTemplate;
     private final DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+
+    @Autowired
+    public BlacklistedJwtTokenRedisRepository(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public void blacklistToken(JwtToken token) {

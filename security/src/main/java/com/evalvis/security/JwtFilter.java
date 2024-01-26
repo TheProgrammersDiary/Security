@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
             JwtToken.existing(request, key.value(), blacklistedJwtTokenRedisRepository)
                     .ifPresent(
                             token -> {
-                                if (token.tokenIsValid()) {
+                                if (token.tokenIsValid() && csrfDoubleSubmitTokenIsValid(request, token)) {
                                     UserDetails userDetails = new User(token.username(), null);
                                     UsernamePasswordAuthenticationToken authentication =
                                             new UsernamePasswordAuthenticationToken(
@@ -50,5 +50,9 @@ public class JwtFilter extends OncePerRequestFilter {
             logger.error("Cannot set user authentication: ", e);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean csrfDoubleSubmitTokenIsValid(HttpServletRequest request, JwtToken token) {
+        return request.getHeader("X-CSRF-TOKEN").equals(token.csrfToken());
     }
 }

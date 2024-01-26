@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,7 +53,10 @@ public class ITTests {
     private void login(JwtToken token) {
         try {
             jwtFilter.doFilterInternal(
-                    new FakeHttpServletRequest(new Cookie[]{new Cookie("jwt", token.value())}),
+                    new FakeHttpServletRequest(
+                            Map.of("X-CSRF-TOKEN", token.csrfToken()),
+                            new Cookie[]{new Cookie("jwt", token.value())}
+                    ),
                     new FakeHttpServletResponse(),
                     new FakeFilterChain()
             );

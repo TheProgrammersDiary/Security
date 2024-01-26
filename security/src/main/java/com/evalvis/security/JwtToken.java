@@ -12,9 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Optional;
+import java.security.SecureRandom;
+import java.util.*;
 
 public final class JwtToken {
     private static final Logger logger = LoggerFactory.getLogger(JwtToken.class);
@@ -31,6 +30,7 @@ public final class JwtToken {
                 Jwts
                         .builder()
                         .subject(((User) authentication.getPrincipal()).getUsername())
+                        .claim("csrfToken", generateCsrfToken())
                         .issuedAt(new Date())
                         .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                         .signWith(key)
@@ -38,6 +38,12 @@ public final class JwtToken {
                 key,
                 blacklistedJwtTokenRepository
         );
+    }
+
+    public static String generateCsrfToken() {
+        byte[] randomBytes = new byte[32];
+        new SecureRandom().nextBytes(randomBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 
     public static Optional<JwtToken> existing(
@@ -87,6 +93,12 @@ public final class JwtToken {
 
     public Date expirationDate() {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getExpiration();
+    }
+
+    public String csrfToken() {
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get(
+                "csrfToken", String.class
+        );
     }
 
     public boolean tokenIsValid() {

@@ -87,7 +87,7 @@ public final class JwtToken {
         return token;
     }
 
-    public String username() {
+    public String email() {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
     }
 

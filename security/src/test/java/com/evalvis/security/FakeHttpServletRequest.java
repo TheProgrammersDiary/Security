@@ -155,7 +155,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
     }
 
     @Override
-    public void login(String username, String password) {
+    public void login(String email, String password) {
         throw new UnsupportedOperationException("Not implemented");
     }
 

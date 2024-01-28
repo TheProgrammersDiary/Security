@@ -27,20 +27,24 @@ public class ITTests {
     @Test
     void authenticates() {
         JwtToken token = JwtToken.create(
-                new FakeAuthentication("tester1", null), key.value(), blacklistedJwtTokenRedisRepository
+                new FakeAuthentication("tester1@gmail.com", null),
+                key.value(),
+                blacklistedJwtTokenRedisRepository
         );
 
         login(token);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        assertEquals("tester1", ((User) authentication.getPrincipal()).getUsername());
+        assertEquals("tester1@gmail.com", ((User) authentication.getPrincipal()).getUsername());
         assertTrue(authentication.isAuthenticated());
     }
 
     @Test
     void blacklistsToken() {
         JwtToken token = JwtToken.create(
-                new FakeAuthentication("tester2", null), key.value(), blacklistedJwtTokenRedisRepository
+                new FakeAuthentication("tester2@gmail.com", null),
+                key.value(),
+                blacklistedJwtTokenRedisRepository
         );
 
         blacklistedJwtTokenRedisRepository.blacklistToken(token);
@@ -68,7 +72,9 @@ public class ITTests {
     @Test
     void doesNotRemoveValidBlacklistedTokens() {
         JwtToken token = JwtToken.create(
-                new FakeAuthentication("tester", null), key.value(), blacklistedJwtTokenRedisRepository
+                new FakeAuthentication("tester@gmail.com", null),
+                key.value(),
+                blacklistedJwtTokenRedisRepository
         );
         blacklistedJwtTokenRedisRepository.blacklistToken(token);
 

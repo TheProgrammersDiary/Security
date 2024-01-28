@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     .ifPresent(
                             token -> {
                                 if (token.tokenIsValid() && csrfDoubleSubmitTokenIsValid(request, token)) {
-                                    UserDetails userDetails = new User(token.username(), null);
+                                    UserDetails userDetails = new User(token.email(), null);
                                     UsernamePasswordAuthenticationToken authentication =
                                             new UsernamePasswordAuthenticationToken(
                                                     userDetails,

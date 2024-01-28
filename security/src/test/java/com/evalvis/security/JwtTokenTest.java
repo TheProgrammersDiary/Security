@@ -29,11 +29,11 @@ public class JwtTokenTest {
     @Test
     void createsToken() {
         JwtToken token = JwtToken.create(
-                new FakeAuthentication("tester", null), key, blacklistedJwtTokenRepository
+                new FakeAuthentication("tester@gmail.com", null), key, blacklistedJwtTokenRepository
         );
 
         assertAll(
-                () -> assertEquals("tester", token.username()),
+                () -> assertEquals("tester@gmail.com", token.email()),
                 () -> assertTrue(token.expirationDate().after(new Date(System.currentTimeMillis()))),
                 () -> assertTrue(token.tokenIsValid())
         );
@@ -46,7 +46,7 @@ public class JwtTokenTest {
                         "Authorization",
                         "Bearer " +
                                 JwtToken.create(
-                                        new FakeAuthentication("tester", null),
+                                        new FakeAuthentication("tester@gmail.com", null),
                                         key,
                                         blacklistedJwtTokenRepository
                                 ).value()
@@ -56,7 +56,7 @@ public class JwtTokenTest {
         Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRepository);
 
         assertTrue(token.isPresent());
-        assertEquals("tester", token.get().username());
+        assertEquals("tester@gmail.com", token.get().email());
         assertTrue(token.get().expirationDate().after(new Date(System.currentTimeMillis())));
         assertTrue(token.get().tokenIsValid());
     }
@@ -68,7 +68,7 @@ public class JwtTokenTest {
                         new Cookie(
                                 "jwt",
                                 JwtToken.create(
-                                        new FakeAuthentication("tester", null),
+                                        new FakeAuthentication("tester@gmail.com", null),
                                         key,
                                         blacklistedJwtTokenRepository
                                 ).value()
@@ -79,7 +79,7 @@ public class JwtTokenTest {
         Optional<JwtToken> token = JwtToken.existing(httpRequest, key, blacklistedJwtTokenRepository);
 
         assertTrue(token.isPresent());
-        assertEquals("tester", token.get().username());
+        assertEquals("tester@gmail.com", token.get().email());
         assertTrue(token.get().expirationDate().after(new Date(System.currentTimeMillis())));
         assertTrue(token.get().tokenIsValid());
     }

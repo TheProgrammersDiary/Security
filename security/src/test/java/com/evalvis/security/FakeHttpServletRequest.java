@@ -19,7 +19,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
         this(Collections.emptyMap(), cookies);
     }
 
-    public FakeHttpServletRequest(Map<String, String> headers, Cookie[] cookies) {
+    private FakeHttpServletRequest(Map<String, String> headers, Cookie[] cookies) {
         this.headers = headers;
         this.cookies = cookies;
     }

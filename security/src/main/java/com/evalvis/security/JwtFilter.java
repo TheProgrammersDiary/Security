@@ -20,8 +20,7 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-    @Autowired
-    private BlacklistedJwtTokenRedisRepository blacklistedJwtTokenRedisRepository;
+
     @Autowired
     private JwtKey key;
 
@@ -30,10 +29,10 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         try {
-            JwtToken.existing(request, key.value(), blacklistedJwtTokenRedisRepository)
+            JwtShortLivedToken.existing(request, key.value())
                     .ifPresent(
                             token -> {
-                                if (token.tokenIsValid() && csrfDoubleSubmitTokenIsValid(request, token)) {
+                                if (token.tokenIsValid()) {
                                     UserDetails userDetails = new User(token.email(), null);
                                     UsernamePasswordAuthenticationToken authentication =
                                             new UsernamePasswordAuthenticationToken(
@@ -50,9 +49,5 @@ public class JwtFilter extends OncePerRequestFilter {
             logger.error("Cannot set user authentication: ", e);
         }
         filterChain.doFilter(request, response);
-    }
-
-    private boolean csrfDoubleSubmitTokenIsValid(HttpServletRequest request, JwtToken token) {
-        return request.getHeader("X-CSRF-TOKEN").equals(token.csrfToken());
     }
 }

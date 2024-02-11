@@ -65,6 +65,10 @@ public final class JwtRefreshToken {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
     }
 
+    public String username() {
+        return (String) Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("username");
+    }
+
     public Date expirationDate() {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getExpiration();
     }

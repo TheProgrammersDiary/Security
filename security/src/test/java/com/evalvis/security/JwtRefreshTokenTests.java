@@ -26,7 +26,7 @@ public class JwtRefreshTokenTests {
     @Test
     void createsRefreshToken() {
         JwtRefreshToken token = JwtRefreshToken.create(
-                new FakeAuthentication("tester@gmail.com", null, "tester"), key
+                "tester", new FakeAuthentication("tester@gmail.com", null), key
         );
 
         assertEquals("tester@gmail.com", token.email());
@@ -41,7 +41,10 @@ public class JwtRefreshTokenTests {
                         new Cookie(
                                 "jwt",
                                 JwtRefreshToken
-                                        .create(new FakeAuthentication("tester@gmail.com", null, "tester"), key)
+                                        .create(
+                                                "tester",
+                                                new FakeAuthentication("tester@gmail.com", null), key
+                                        )
                                         .value()
                         )
                 }
@@ -62,7 +65,10 @@ public class JwtRefreshTokenTests {
                         new Cookie(
                                 "jwt",
                                 JwtRefreshToken
-                                        .create(new FakeAuthentication("tester@gmail.com", null, "tester"), key)
+                                        .create(
+                                                "tester",
+                                                new FakeAuthentication("tester@gmail.com", null), key
+                                        )
                                         .value()
                         )
                 }

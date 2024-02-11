@@ -25,7 +25,9 @@ public class ITTests {
     @Test
     void authenticates() {
         JwtShortLivedToken token = JwtShortLivedToken.create(
-                JwtRefreshToken.create(new FakeAuthentication("tester1@gmail.com", null), key.value()), key.value()
+                JwtRefreshToken.create(
+                        new FakeAuthentication("tester1@gmail.com", null, "tester1"), key.value()
+                ), key.value()
         );
 
         login(token);

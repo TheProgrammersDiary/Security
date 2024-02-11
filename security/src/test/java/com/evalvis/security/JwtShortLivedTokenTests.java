@@ -26,7 +26,7 @@ public class JwtShortLivedTokenTests {
     @Test
     void createsToken() {
         JwtShortLivedToken token = JwtShortLivedToken.create(
-                JwtRefreshToken.create(new FakeAuthentication("tester@gmail.com", null), key), key
+                JwtRefreshToken.create(new FakeAuthentication("tester@gmail.com", null, "tester"), key), key
         );
 
         assertEquals("tester@gmail.com", token.email());
@@ -41,7 +41,9 @@ public class JwtShortLivedTokenTests {
                         "Authorization",
                         "Bearer " +
                                 JwtShortLivedToken.create(
-                                        JwtRefreshToken.create(new FakeAuthentication("tester@gmail.com", null), key),
+                                        JwtRefreshToken.create(
+                                                new FakeAuthentication("tester@gmail.com", null, "tester"), key
+                                        ),
                                         key
                                 ).value()
                 )
@@ -61,7 +63,9 @@ public class JwtShortLivedTokenTests {
                 Map.of(
                         "Authorization",
                         "Bearer " + JwtShortLivedToken.create(
-                                JwtRefreshToken.create(new FakeAuthentication("tester@gmail.com", null), key),
+                                JwtRefreshToken.create(
+                                        new FakeAuthentication("tester@gmail.com", null, "tester"), key
+                                ),
                                 key
                         ).value()
                 )

@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +26,7 @@ public class JwtRefreshTokenTests {
     @Test
     void createsRefreshToken() {
         JwtRefreshToken token = JwtRefreshToken.create(
-                new FakeAuthentication("tester@gmail.com", null), key
+                new FakeAuthentication("tester@gmail.com", null, "tester"), key
         );
 
         assertEquals("tester@gmail.com", token.email());
@@ -42,7 +41,7 @@ public class JwtRefreshTokenTests {
                         new Cookie(
                                 "jwt",
                                 JwtRefreshToken
-                                        .create(new FakeAuthentication("tester@gmail.com", null), key)
+                                        .create(new FakeAuthentication("tester@gmail.com", null, "tester"), key)
                                         .value()
                         )
                 }
@@ -63,7 +62,7 @@ public class JwtRefreshTokenTests {
                         new Cookie(
                                 "jwt",
                                 JwtRefreshToken
-                                        .create(new FakeAuthentication("tester@gmail.com", null), key)
+                                        .create(new FakeAuthentication("tester@gmail.com", null, "tester"), key)
                                         .value()
                         )
                 }

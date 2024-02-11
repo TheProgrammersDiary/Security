@@ -27,6 +27,7 @@ public final class JwtRefreshToken {
                 Jwts
                         .builder()
                         .subject(((User) authentication.getPrincipal()).getUsername())
+                        .claim("username", authentication.getDetails())
                         .issuedAt(new Date())
                         .expiration(new Date((new Date()).getTime() + expirationMs))
                         .signWith(key)

@@ -25,6 +25,7 @@ public final class JwtShortLivedToken {
                 Jwts
                         .builder()
                         .subject(refreshToken.email())
+                        .claim("username", refreshToken.username())
                         .issuedAt(new Date())
                         .expiration(new Date((new Date()).getTime() + expirationMs))
                         .signWith(key)
@@ -61,6 +62,10 @@ public final class JwtShortLivedToken {
 
     public String email() {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
+    }
+
+    public String username() {
+        return (String) Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("username");
     }
 
     public Date expirationDate() {

@@ -11,7 +11,7 @@
 
   <groupId>com.evalvis</groupId>
   <artifactId>security</artifactId>
-  <version>3.4.0</version>
+  <version>3.4.1</version>
   <name>security</name>
 
   <distributionManagement>

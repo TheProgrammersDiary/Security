@@ -25,7 +25,7 @@ jobs:
         key: ${{runner.os}}-m2-${{hashFiles('security/pom.xml')}}
         restore-keys: ${{runner.os}}-m2
     - name: test
-      run: mvn -B -f security/pom.xml test
+      run: mvn -B -f security/pom.xml test -Ptest
     - name: Publish Test Report
       if: success() || failure()
       uses: scacap/action-surefire-report@v1

@@ -72,6 +72,20 @@
     </dependency>
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>test</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
+
   <build>
     <plugins>
       <plugin>

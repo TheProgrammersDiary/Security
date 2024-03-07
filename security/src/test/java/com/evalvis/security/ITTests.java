@@ -26,7 +26,10 @@ public class ITTests {
     void authenticates() {
         JwtShortLivedToken token = JwtShortLivedToken.create(
                 JwtRefreshToken.create(
-                        "tester1", new FakeAuthentication("tester1@gmail.com", null), key.value()
+                        "tester1",
+                        new FakeAuthentication("tester1@gmail.com", null),
+                        key.value(),
+                        true
                 ), key.value()
         );
 

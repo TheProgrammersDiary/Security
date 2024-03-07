@@ -21,13 +21,16 @@ public final class JwtRefreshToken {
     private final String token;
     private final SecretKey key;
 
-    public static JwtRefreshToken create(String username, Authentication authentication, SecretKey key) {
+    public static JwtRefreshToken create(
+            String username, Authentication authentication, SecretKey key, boolean isLoginLocal
+    ) {
         int expirationMs = 1000 * 60 * 60 * 24 * 14;
         return new JwtRefreshToken(
                 Jwts
                         .builder()
                         .subject(((User) authentication.getPrincipal()).getUsername())
                         .claim("username", username)
+                        .claim("isLoginLocal", isLoginLocal)
                         .issuedAt(new Date())
                         .expiration(new Date((new Date()).getTime() + expirationMs))
                         .signWith(key)
@@ -67,6 +70,10 @@ public final class JwtRefreshToken {
 
     public String username() {
         return (String) Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("username");
+    }
+
+    public boolean isLoginLocal() {
+        return (Boolean) Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("isLoginLocal");
     }
 
     public Date expirationDate() {
